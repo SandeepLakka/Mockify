@@ -12,7 +12,6 @@ models:
   Post:
     _count: 6
     belongsTo: Author         # child-side
-    hasMany: [ Comment ]
     fake:
       id: uuid
       title: sentence
@@ -20,31 +19,3 @@ models:
       views: int[min,max][0,5000]
       status: oneofstring[draft,published,archived]
       price: price[min,max][9.99,49.99]
-
-  Comment:
-    _count: 12
-    belongsTo: Post
-    fake:
-      id: UUID
-      commenter: name
-      message: sentence
-      createdAt: datetime[start,end][2023-01-01T00:00:00Z,2025-01-01T00:00:00Z]
-
-  Product:
-    _count: 8
-    hasMany: [ InventoryEvent ]
-    fake:
-      sku: lexify[SKU-????]
-      name: word
-      colour: oneofstring[red,green,blue]
-      quantity: int[min,max][1,250]
-      unitPrice: price[min,max][1.99,99.99]
-
-  InventoryEvent:
-    _count: 30
-    belongsTo: Product
-    fake:
-      id: UUID
-      type: oneofstring[IN,OUT]
-      delta: int[min,max][-50,50]
-      happenedAt: datetime[start,end][2024-01-01T00:00:00Z,2025-01-01T00:00:00Z]

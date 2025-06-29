@@ -16,9 +16,9 @@ but written in Java17 & Spring Boot3.
 * **40+ built‑in generators** – name, country, uuid, int\[min,max], price\[min,max] …
 * **Relationship keywords** – `belongsTo`, `hasOne`, `hasMany` *(view‑only for now)*.
 * **Visual schema builder** – Tailwind+Alpine UI to edit YAML without leaving the browser.
-* **Instant REST endpoints** – `GET /api/<Model>` + `?expand=` queries.
-* **Plug‑in architecture** – drop your own generator JARs & restart.
-* **Hot‑reload** – saving `jsonSchema.yml` auto‑rebuilds the dataset.
+* **Instant REST endpoints** – `GET /api/<Model>` queries.
+* **Plug‑in architecture** – drop your own generator implementation & restart (Generic/Format plugin based architecture
+  is WIP).
 
 ---
 
@@ -43,12 +43,12 @@ $ ./mvnw spring-boot:run
 ```yaml
 models:
   User:
-    _count: 10
+    _count: 10 # -- count of how many records we need to generate for User
     fake:
-      id: UUID
-      name: name
-      age: int[min,max][18,100]
-      country: country
+      id: UUID # -- random UUID
+      name: name # -- random name
+      age: int[min,max][18,100] # -- random int between 18 and 100 (both inclusive)
+      country: country # -- random country
 ```
 
 | Key             | Meaning                                         |

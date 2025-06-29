@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: Mockify
+mockify:
+  schema-path: src/main/resources/jsonSchema.yml
+  join-policy: deep
