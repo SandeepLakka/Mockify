@@ -28,7 +28,7 @@ but written in Java17 & Spring Boot3.
 # clone & run
 $ git clone https://github.com/SandeepLakka/mockify.git
 $ cd mockify
-$ ./mvnw spring-boot:run
+$ mvn spring-boot:run
 ```
 
 | URL                                | Description                 |
@@ -74,7 +74,7 @@ models:
 
 This is a personal side‑project – **not backed by any company** – and I welcome feedback, issues and PRs.
 
-1. `fork → clone → ./mvnw test`
+1. `fork → clone → mvn test`
 2. Follow [ConventionalCommits](https://www.conventionalcommits.org/)
 3. Open a PR – I merge fast & with gratitude.
 
