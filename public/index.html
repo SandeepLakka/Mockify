@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Mockify: The Developer's Guide to Instant Mock APIs</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Font - Inter from Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Light blue-gray background */
+            color: #334155; /* Slate 700 */
+        }
+        h1, h2, h3, h4 {
+            color: #1e293b; /* Slate 900 */
+            font-weight: 600;
+        }
+        a {
+            color: #2563eb; /* Blue 600 */
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        pre {
+            background-color: #e2e8f0; /* Slate 200 */
+            border-left: 4px solid #3b82f6; /* Blue 500 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+        }
+        code {
+            background-color: #e2e8f0; /* Slate 200 */
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem; /* text-sm */
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+        }
+        /* Mermaid specific styles */
+        .mermaid {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1; /* Slate 300 */
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+            text-align: center; /* Center the graph */
+            overflow-x: auto; /* Allow horizontal scrolling for wide graphs */
+        }
+        /* Custom Mermaid styling to match Tailwind theme */
+        .mermaid svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+
+
+
+
+
+    </style>
+</head>
+<body class="antialiased">
+<div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-4xl bg-white shadow-lg rounded-xl my-8">
+
+    <!-- Header Section -->
+    <header class="mb-8 pb-4 border-b border-gray-200">
+        <h1 class="text-4xl font-bold text-center mb-2">Mockify: The Developer's Guide to Instant Mock APIs</h1>
+        <p class="text-lg text-center text-gray-600">Welcome to the official documentation for Mockify, a powerful tool
+            for generating instant, schema-driven mock REST APIs. This document serves as a comprehensive guide for
+            users, developers, and contributors.</p>
+    </header>
+
+    <!-- Table of Contents (Simple for now, could be dynamic) -->
+    <nav class="mb-8 p-4 bg-blue-50 rounded-lg shadow-sm">
+        <h2 class="text-2xl font-semibold mb-3 text-blue-800">Table of Contents</h2>
+        <ul class="list-disc list-inside space-y-1">
+            <li><a class="hover:text-blue-700" href="#project-overview">1. Project Overview</a>
+                <ul class="list-disc list-inside ml-4">
+                    <li><a class="hover:text-blue-700" href="#core-concepts">1.1. Core Concepts</a></li>
+                    <li><a class="hover:text-blue-700" href="#high-level-architecture">1.2. High-Level Architecture</a>
+                    </li>
+                </ul>
+            </li>
+            <li><a class="hover:text-blue-700" href="#current-functionality">2. Current Functionality</a>
+                <ul class="list-disc list-inside ml-4">
+                    <li><a class="hover:text-blue-700" href="#api-generation">2.1. API Generation</a></li>
+                    <li><a class="hover:text-blue-700" href="#yaml-schema-definition">2.2. YAML Schema Definition</a>
+                    </li>
+                    <li><a class="hover:text-blue-700" href="#data-generators">2.3. Data Generators</a></li>
+                    <li><a class="hover:text-blue-700" href="#relationship-handling">2.4. Relationship Handling
+                        (View-Only)</a></li>
+                    <li><a class="hover:text-blue-700" href="#schema-builder-ui">2.5. Schema Builder UI
+                        (Work-in-Progress)</a></li>
+                </ul>
+            </li>
+            <li><a class="hover:text-blue-700" href="#issues-limitations">3. Identified Issues & Limitations</a></li>
+            <li><a class="hover:text-blue-700" href="#roadmap-future-enhancements">4. Roadmap & Future Enhancements</a>
+                <ul class="list-disc list-inside ml-4">
+                    <li><a class="hover:text-blue-700" href="#phase-1-core-api">Phase 1: Core API & Usability
+                        Enhancements</a></li>
+                    <li><a class="hover:text-blue-700" href="#phase-2-extensibility">Phase 2: Extensibility and
+                        Customization</a></li>
+                    <li><a class="hover:text-blue-700" href="#phase-3-advanced-features">Phase 3: Advanced Features &
+                        Deployment</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Project Overview Section -->
+    <section class="mb-8" id="project-overview">
+        <h2 class="text-3xl font-semibold mb-4 border-b pb-2">1. Project Overview</h2>
+        <p class="mb-4">Mockify is a Spring Boot application that enables developers to define data models using a
+            simple YAML configuration and instantly expose them as fully-functional JSON REST APIs. The data is
+            generated on-the-fly using the <code>javafaker</code> library, providing realistic and varied mock datasets.
+        </p>
+
+        <h3 class="text-2xl font-semibold mb-3" id="core-concepts">1.1. Core Concepts</h3>
+        <ul class="list-disc list-inside space-y-2 mb-4">
+            <li><strong>YAML-First Schema:</strong> The structure of your mock API (models, fields, and data types) is
+                defined in a central <code>jsonSchema.yml</code> file. This human-readable format is the single source
+                of truth for your data.
+            </li>
+            <li><strong>Dynamic Data Generation:</strong> Mockify uses a registry of data generators to produce fake
+                data for your models. It comes with over 40 built-in generators for common data types like names,
+                addresses, numbers, and more.
+            </li>
+            <li><strong>Instant REST Endpoints:</strong> Once a model is defined in the YAML file, the application
+                automatically exposes a GET endpoint (e.g., <code class="text-sm">/api/&lt;ModelName&gt;</code>) that
+                returns a list of generated objects.
+            </li>
+            <li><strong>In-Memory Datastore:</strong> The generated data is held in memory and regenerated on
+                application startup, ensuring a fast and stateless mocking experience.
+            </li>
+        </ul>
+
+        <h3 class="text-2xl font-semibold mb-3" id="high-level-architecture">1.2. High-Level Architecture</h3>
+        <p class="mb-4">The application reads your schema, generates data based on it, and exposes that data through an
+            API. You can also edit the schema through a simple web interface.</p>
+        <div class="mermaid">
+            graph TD
+            subgraph "You"
+            A[User/Developer]
+            end
+
+            subgraph "Mockify Application"
+            C["Schema Editor (Web UI)"]
+            D["API Endpoints (/api/...)"]
+            E["Data Generation Engine"]
+            F["Schema Manager"]
+            G["YAML Config File"]
+            end
+
+            A -- "Edits schema via" --> C
+            C -- "Updates" --> F
+            A -- "Requests data from" --> D
+            D -- "Asks for data" --> E
+            E -- "Uses rules from" --> F
+            F -- "Reads/Writes" --> G
+            E -- "Generates" --> H[Mock Data]
+            H -- "Is sent to" --> D
+
+            classDef user fill:#e6f3ff,stroke:#0069d9,stroke-width:2px;
+            classDef app fill:#f0f0f0,stroke:#333,stroke-width:2px;
+            class A user;
+            class C,D,E,F,G,H app;
+        </div>
+        <ul class="list-disc list-inside space-y-2 mb-4">
+            <li><strong>Schema Editor:</strong> A web page where you can visually build your data models.</li>
+            <li><strong>Schema Manager:</strong> The internal component that reads and understands your <code>jsonSchema.yml</code>
+                file.
+            </li>
+            <li><strong>Data Generation Engine:</strong> The core part that uses the schema rules to create fake data.
+            </li>
+            <li><strong>API Endpoints:</strong> The live URLs that you can access to get the generated mock data.</li>
+        </ul>
+    </section>
+
+    <!-- Current Functionality Section -->
+    <section class="mb-8" id="current-functionality">
+        <h2 class="text-3xl font-semibold mb-4 border-b pb-2">2. Current Functionality</h2>
+        <p class="mb-4">This section details the features currently implemented in Mockify.</p>
+
+        <h3 class="text-2xl font-semibold mb-3" id="api-generation">2.1. API Generation</h3>
+        <p class="mb-2">The primary function of Mockify is to create RESTful endpoints from a YAML definition.</p>
+        <ul class="list-disc list-inside space-y-1 mb-4">
+            <li><strong>Endpoint:</strong> <code class="text-sm">GET /api/{modelName}</code></li>
+            <li><strong>Description:</strong> Retrieves a list of generated data for the specified model.</li>
+            <li><strong>Example:</strong> A <code>GET</code> request to <code class="text-sm">/api/Author</code> will
+                return a JSON array of author objects.
+            </li>
+        </ul>
+
+        <h3 class="text-2xl font-semibold mb-3" id="yaml-schema-definition">2.2. YAML Schema Definition</h3>
+        <p class="mb-2">You define your data models in <code class="text-sm">src/main/resources/jsonSchema.yml</code>.
+        </p>
+        <h4 class="text-xl font-semibold mb-2">Syntax:</h4>
+        <pre><code class="language-yaml">models:
+  ModelName:
+    _count: &#x3C;number_of_records&#x3E;
+    fake:
+      fieldName: &#x3C;generator_spec&#x3E;
+      # ... other fields
+    belongsTo: &#x3C;ParentModelName&#x3E; # (Optional)
+    hasMany: [ &#x3C;ChildModelName&#x3E; ]  # (Optional)</code></pre>
+        <h4 class="text-xl font-semibold mt-4 mb-2">Key Directives:</h4>
+        <ul class="list-disc list-inside space-y-2 mb-4">
+            <li><code>_count:</code> (Integer) The number of mock data records to generate for the model.</li>
+            <li><code>fake:</code> (Map) A map of field names to their corresponding generator specifications.</li>
+            <li><code>belongsTo:</code> (String) (Partially Implemented) Establishes a many-to-one relationship. It adds
+                a foreign key to the child object named <code class="text-sm">&#x3C;parentModelName&#x3E;Id</code>. For
+                example, a <code>Post</code> model with <code>belongsTo: Author</code> will have an
+                <code>authorId</code> field in its generated data.
+            </li>
+            <li><code>hasMany:</code> (List) (Partially Implemented) Establishes a one-to-many relationship. This is
+                currently used for validation but does not yet support nested data expansion by default.
+            </li>
+        </ul>
+
+        <h3 class="text-2xl font-semibold mb-3" id="data-generators">2.3. Data Generators</h3>
+        <p class="mb-2">Mockify includes a wide range of data generators.</p>
+        <p class="mb-2"><strong>Simple Generators:</strong> <code class="text-sm">name</code>, <code class="text-sm">email</code>,
+            <code class="text-sm">city</code>, <code class="text-sm">country</code>, <code class="text-sm">uuid</code>.
+        </p>
+        <h4 class="text-xl font-semibold mt-4 mb-2">Parameterized Generators:</h4>
+        <ul class="list-disc list-inside space-y-2 mb-4">
+            <li><code class="text-sm">int[min,max]</code>: Generates an integer within the specified range.<br>
+                Example: <code class="text-sm">age: int[18,65]</code></li>
+            <li><code class="text-sm">price[min,max]</code>: Generates a decimal price value.<br>
+                Example: <code class="text-sm">cost: price[9.99, 199.99]</code></li>
+            <li><code class="text-sm">loremparagraphs[min,max]</code>: Generates paragraphs of lorem ipsum text.<br>
+                Example: <code class="text-sm">article: loremparagraphs[2,5]</code></li>
+            <li><code class="text-sm">datetime[start,end]</code>: Generates an ISO-8601 timestamp within a date
+                range.<br>
+                Example: <code class="text-sm">createdAt: datetime[2022-01-01T00:00:00Z,2023-01-01T00:00:00Z]</code>
+            </li>
+            <li><code class="text-sm">oneofstring[...]</code>: Picks a random value from a comma-separated list.<br>
+                Example: <code class="text-sm">status: oneofstring[active,inactive,pending]</code></li>
+            <li><code class="text-sm">imageurl[w,h]</code>: Generates a random placeholder image URL from <a
+                    class="text-blue-600 hover:text-blue-700" href="https://picsum.photos"
+                    target="_blank">picsum.photos</a>.<br>
+                Example: <code class="text-sm">avatar: imageurl[200,200]</code></li>
+        </ul>
+
+        <h3 class="text-2xl font-semibold mb-3" id="relationship-handling">2.4. Relationship Handling (View-Only)</h3>
+        <p class="mb-2">The current implementation supports basic relationship definitions for data modeling
+            clarity.</p>
+        <ul class="list-disc list-inside space-y-2 mb-4">
+            <li><code>belongsTo:</code> Adds a foreign key (<code class="text-sm">&#x3C;parentName&#x3E;Id</code>) to
+                the child object's data, linking it to a random parent record.
+            </li>
+            <li><code>hasMany / hasOne:</code> These are recognized but primarily used for schema validation at startup.
+            </li>
+            <li><strong>Join Policy:</strong> The <code>join-policy</code> property in <code>application.yml</code>
+                (<code>deep</code>, <code>shallow</code>, <code>fks</code>) allows for basic nested data expansion in
+                API responses, but this is still a work-in-progress and can be brittle.
+            </li>
+        </ul>
+
+        <h3 class="text-2xl font-semibold mb-3" id="schema-builder-ui">2.5. Schema Builder UI (Work-in-Progress)</h3>
+        <p class="mb-2">A visual schema builder is available at <code class="text-sm">/schema-builder</code>.</p>
+        <h4 class="text-xl font-semibold mb-2">Functionality:</h4>
+        <ul class="list-disc list-inside space-y-2 mb-4">
+            <li>Displays existing models and fields from the YAML file.</li>
+            <li>Allows adding and removing models and fields.</li>
+            <li>Provides dropdowns for selecting generators.</li>
+            <li>Saves changes back to the <code>jsonSchema.yml</code> file.</li>
+        </ul>
+        <p class="mb-4"><strong>Current State:</strong> The UI is functional but lacks polish and advanced features like
+            drag-and-drop relationship management. It's a solid foundation for a more powerful GUI.</p>
+    </section>
+
+    <!-- Identified Issues & Limitations Section -->
+    <section class="mb-8" id="issues-limitations">
+        <h2 class="text-3xl font-semibold mb-4 border-b pb-2">3. Identified Issues & Limitations</h2>
+        <ul class="list-disc list-inside space-y-2 mb-4">
+            <li><strong>Read-Only APIs:</strong> The application only supports <code>GET</code> requests. There is no
+                functionality for creating, updating, or deleting data (<code>POST</code>, <code>PUT</code>, <code>DELETE</code>,
+                <code>PATCH</code>).
+            </li>
+            <li><strong>Stateless In-Memory Data:</strong> Data is regenerated on every application restart. There is no
+                persistence, meaning any "changes" to the data are lost. This is acceptable for a mock server but limits
+                its use in stateful testing scenarios.
+            </li>
+            <li><strong>Limited Relationship Support:</strong> While relationships can be defined, they are not fully
+                realized. True nested object expansion, querying based on relationships, and ensuring referential
+                integrity are not yet implemented.
+            </li>
+            <li><strong>Basic UI:</strong> The schema builder is functional but could be significantly more intuitive.
+                It lacks validation, drag-and-drop features, and a clear representation of relationships.
+            </li>
+            <li><strong>Hardcoded Generator Registry:</strong> The <code>GeneratorRegistry</code> is a static class,
+                making it impossible to add new custom generators without modifying the core source code and recompiling
+                the application. A plugin architecture is needed.
+            </li>
+            <li><strong>Configuration Hot-Reload:</strong> Changes made directly to <code>jsonSchema.yml</code> while
+                the application is running are not automatically detected. A server restart is required.
+            </li>
+            <li><strong>Single-Tenant Architecture:</strong> The application serves a single <code>jsonSchema.yml</code>
+                file. There is no concept of multi-user or multi-tenant workspaces.
+            </li>
+            <li><strong>Limited API Input Support:</strong> The API endpoints do not currently support advanced querying
+                via query parameters, path variables for fetching single items (<code
+                        class="text-sm">/api/Author/1</code>), or request bodies for write operations.
+            </li>
+            <li><strong>Fixed Output Format:</strong> The API only returns data in JSON format.</li>
+        </ul>
+    </section>
+
+    <!-- Roadmap & Future Enhancements Section -->
+    <section class="mb-8" id="roadmap-future-enhancements">
+        <h2 class="text-3xl font-semibold mb-4 border-b pb-2">4. Roadmap & Future Enhancements</h2>
+        <p class="mb-4">This roadmap incorporates your requests and adds strategic recommendations for evolving Mockify
+            into a comprehensive, enterprise-grade mocking tool.</p>
+
+        <h3 class="text-2xl font-semibold mb-3" id="phase-1-core-api">Phase 1: Core API & Usability Enhancements</h3>
+        <p class="mb-2"><strong>Objective:</strong> Solidify the core API functionality and improve the user experience.
+        </p>
+        <h4 class="text-xl font-semibold mb-2">Full CRUD Support:</h4>
+        <p class="mb-2">This will allow you to create, read, update, and delete mock data.</p>
+        <ul class="list-disc list-inside space-y-1 mb-4">
+            <li><code class="text-sm">GET /api/{model}/{id}</code>: Fetch a single record.</li>
+            <li><code class="text-sm">POST /api/{model}</code>: Create a new record.</li>
+            <li><code class="text-sm">PUT /api/{model}/{id}</code>: Replace an existing record.</li>
+            <li><code class="text-sm">PATCH /api/{model}/{id}</code>: Partially update a record.</li>
+            <li><code class="text-sm">DELETE /api/{model}/{id}</code>: Remove a record.</li>
+        </ul>
+        <h4 class="text-xl font-semibold mb-2">How It Works:</h4>
+        <div class="mermaid">
+            sequenceDiagram
+            participant User
+            participant Mockify
+            User->>+Mockify: 1. Send request to add a new Author
+            Note right of Mockify: Mockify adds the new author<br/>to its in-memory list
+            Mockify-->>-User: 2. Confirm creation and return new Author with ID
+            User->>+Mockify: 3. Request the author data using its ID
+            Note right of Mockify: Mockify finds the author<br/>in its list
+            Mockify-->>-User: 4. Return the requested author data
+        </div>
+        <h4 class="text-xl font-semibold mt-4 mb-2">Enhanced Schema Builder GUI:</h4>
+        <ul class="list-disc list-inside space-y-2 mb-4">
+            <li>Implement a dedicated "Home" or "Dashboard" page with project information, quick links, and API usage
+                examples.
+            </li>
+            <li>Create a visual, drag-and-drop interface for defining relationships between models.</li>
+            <li>Add real-time validation and feedback in the UI.</li>
+            <li>Improve styling and responsiveness for a modern look and feel.</li>
+        </ul>
+        <h4 class="text-xl font-semibold mt-4 mb-2">Basic API Querying:</h4>
+        <ul class="list-disc list-inside space-y-2 mb-4">
+            <li>Implement support for basic filtering via query parameters (e.g., <code class="text-sm">GET
+                /api/Posts?status=published</code>).
+            </li>
+            <li>Add pagination support (e.g., <code class="text-sm">?_page=1&amp;_limit=10</code>).</li>
+            <li>Add sorting support (e.g., <code class="text-sm">?_sort=views&amp;_order=desc</code>).</li>
+        </ul>
+
+        <h3 class="text-2xl font-semibold mb-3" id="phase-2-extensibility">Phase 2: Extensibility and Customization</h3>
+        <p class="mb-2"><strong>Objective:</strong> Make Mockify more flexible and powerful by allowing users to extend
+            its functionality.</p>
+        <h4 class="text-xl font-semibold mb-2">Plugin Architecture for Generators:</h4>
+        <p class="mb-2">Allow users to add their own custom data generators without changing the core code.</p>
+        <h4 class="text-xl font-semibold mb-2">Concept:</h4>
+        <div class="mermaid">
+            graph LR
+            subgraph "Your Custom Code"
+            A["Your Generator Logic (e.g., 'generateEmployeeID')"]
+            end
+            subgraph "Mockify"
+            B["'plugins' Folder"]
+            C{Data Generation Engine}
+            end
+            subgraph "Result"
+            D["New Generator Available in UI & API"]
+            end
+
+            A -- "Package into a .jar file" --> B
+            C -- "Discovers and loads from" --> B
+            C -- "Enables" --> D
+
+            classDef custom fill:#d4edda,stroke:#155724;
+            classDef mockify fill:#f0f0f0,stroke:#333;
+            classDef result fill:#cce5ff,stroke:#004085;
+
+            class A custom;
+            class B,C mockify;
+            class D result;
+        </div>
+        <h4 class="text-xl font-semibold mt-4 mb-2">Configurable Providers:</h4>
+        <p class="mb-2">Allow users to configure the providers for text (e.g., switch from lorem to another text source)
+            and images (e.g., use <a class="text-blue-600 hover:text-blue-700" href="https://placehold.co"
+                                     target="_blank">placehold.co</a> instead of <a
+                    class="text-blue-600 hover:text-blue-700" href="https://picsum.photos"
+                    target="_blank">picsum.photos</a>) via <code>application.yml</code>.</p>
+        <h4 class="text-xl font-semibold mt-4 mb-2">Multiple Output Formats:</h4>
+        <p class="mb-2">Use content negotiation (via the <code>Accept</code> header) to support returning data in
+            formats like XML, CSV, or YAML in addition to JSON.</p>
+
+        <h3 class="text-2xl font-semibold mb-3" id="phase-3-advanced-features">Phase 3: Advanced Features &
+            Deployment</h3>
+        <p class="mb-2"><strong>Objective:</strong> Introduce enterprise-level features like multi-tenancy and robust
+            relationship management.</p>
+        <h4 class="text-xl font-semibold mb-2">Full Relationship Support:</h4>
+        <ul class="list-disc list-inside space-y-2 mb-4">
+            <li>Implement bidirectional, "deep" data nesting based on <code>hasMany</code> and <code>belongsTo</code>
+                relationships (e.g., <code class="text-sm">GET /api/Authors?_embed=posts</code>).
+            </li>
+            <li>Ensure that when a parent record is deleted, its child records (or the links to them) are also handled
+                correctly in the in-memory store.
+            </li>
+        </ul>
+        <h4 class="text-xl font-semibold mt-4 mb-2">Multi-Tenancy/Multi-User Support:</h4>
+        <p class="mb-2"><strong>Concept:</strong> Each user or team gets a private, isolated workspace for their schemas
+            and mock data.</p>
+        <h4 class="text-xl font-semibold mb-2">Implementation:</h4>
+        <ul class="list-disc list-inside space-y-2 mb-4">
+            <li>Change API endpoints to <code class="text-sm">/{workspaceId}/api/{model}</code>.</li>
+            <li>Store schema files in a workspace-specific directory structure (e.g., <code class="text-sm">/schemas/{workspaceId}/jsonSchema.yml</code>).
+            </li>
+            <li>Implement a mechanism to create, manage, and tear down workspaces. An in-memory cache could hold
+                workspace data, which is cleared after a period of inactivity.
+            </li>
+        </ul>
+        <h4 class="text-xl font-semibold mt-4 mb-2">CLI & Dockerization:</h4>
+        <ul class="list-disc list-inside space-y-2 mb-4">
+            <li>Create a command-line interface (CLI) for starting the Mockify server with a specific YAML file.</li>
+            <li>Publish a Docker image for easy, one-liner deployment.</li>
+        </ul>
+    </section>
+
+    <footer class="text-center text-gray-500 text-sm mt-12 pt-6 border-t border-gray-200">
+        <p>&copy; 2025 Mockify Documentation. All rights reserved.</p>
+        <p>If you find any discrepancies, issues or want to collaborate, hit me up on my github profile!</p>
+    </footer>
+</div>
+
+<!-- Mermaid.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+        // Initialize Mermaid.js
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default', // You can try 'forest', 'dark', 'neutral'
+            flowchart: {
+                htmlLabels: true
+            },
+            sequence: {
+                mirrorActors: true
+            }
+        });
+
+
+
+
+
+
+</script>
+</body>
+</html>
