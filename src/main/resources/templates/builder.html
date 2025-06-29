@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html class="antialiased" lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Schema Builder</title>
+
+    <!-- Tailwind v2 -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+
+    <!-- Alpine v3 -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>.invalid{border-color:#f87171}</style>
+</head>
+
+<body class="bg-gray-50 p-6" x-data="builder()">
+
+<div class="mb-6 p-4 bg-green-100 text-green-800 rounded" th:if="${msg}"
+     th:text="${msg}"></div>
+
+<form class="space-y-8" method="post" th:action="@{/schema-builder}">
+
+    <!-- inline server data as JS literals -->
+    <script th:inline="javascript">
+      const catalog = /*[[${catalog}]]*/ [];
+      const models  = /*[[${models}]]*/ [];
+
+      /* Build a unique, sorted list of base names (drop “[…]” variants). */
+      const baseOptions = Array.from(
+        new Set( catalog.map(c =>
+              c.name.includes('[') ? c.name.split('[')[0] : c.name)))
+        .sort();
+
+
+    </script>
+
+    <!-- ───── model cards ───── -->
+    <template :key="mi" x-for="(m,mi) in models">
+        <section class="bg-white shadow rounded-lg p-6 hover:shadow-lg transition">
+
+            <!-- header (name / count / relations) -->
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-center mb-5">
+                <input :name="`models[${mi}].name`"
+                       class="col-span-3 border-b-2 border-indigo-500 focus:outline-none pb-1"
+                       placeholder="Model name"
+                       x-model="m.name"/>
+
+                <input :name="`models[${mi}].count`" class="col-span-2 text-center bg-gray-100 rounded"
+                       min="1"
+                       type="number"
+                       x-model.number="m.count"/>
+
+                <div class="col-span-2">
+                    <label class="text-sm">Belongs to</label>
+                    <select :name="`models[${mi}].belongsTo`"
+                            class="w-full border rounded px-2 py-1"
+                            x-model="m.belongsTo">
+                        <option value="">— none —</option>
+                        <template :key="opt" x-for="opt in relOpts(mi)">
+                            <option :value="opt" x-text="opt"></option>
+                        </template>
+                    </select>
+                </div>
+
+                <div class="col-span-2">
+                    <label class="text-sm">Has one</label>
+                    <select :name="`models[${mi}].hasOne`"
+                            class="w-full border rounded px-2 py-1"
+                            x-model="m.hasOne">
+                        <option value="">— none —</option>
+                        <template :key="opt" x-for="opt in relOpts(mi)">
+                            <option :value="opt" x-text="opt"></option>
+                        </template>
+                    </select>
+                </div>
+
+                <div class="col-span-full md:col-span-5">
+                    <label class="text-sm">Has many</label>
+                    <select :name="`models[${mi}].hasMany`" class="w-full border rounded px-2 py-1"
+                            multiple
+                            size="3"
+                            x-model="m.hasMany">
+                        <template :key="opt" x-for="opt in relOpts(mi)">
+                            <option :value="opt" x-text="opt"></option>
+                        </template>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ───── fields ───── -->
+            <template :key="fi" x-for="(f,fi) in m.fields">
+                <div class="grid grid-cols-[1fr_1.4fr_1fr_auto] gap-3 items-center mb-2">
+
+                    <!-- field key -->
+                    <input :name="`models[${mi}].fields[${fi}].fieldKey`"
+                           class="border rounded px-2 py-1 text-sm"
+                           x-model="f.fieldKey"/>
+
+                    <!--                    &lt;!&ndash; generator dropdown + label &ndash;&gt;-->
+                    <!--                    <div class="flex items-center gap-1">-->
+                    <!--                        <select x-model="f.base"-->
+                    <!--                                :name="`models[${mi}].fields[${fi}].base`"-->
+                    <!--                                :class="{'invalid':!f.base}"-->
+                    <!--                                class="border rounded px-2 py-1 text-sm">-->
+                    <!--                            <option value="">— generator —</option>-->
+                    <!--                            <template x-for="g in catalog" :key="g.name">-->
+                    <!--                                <option :value="g.name" x-text="g.name"></option>-->
+                    <!--                            </template>-->
+                    <!--                        </select>-->
+                    <!--                        <span x-text="f.label" class="text-gray-500 text-sm"></span>-->
+                    <!--                    </div>-->
+                    <!-- generator dropdown + label -->
+                    <div class="flex items-center gap-1">
+
+                        <!-- dropdown uses baseOptions -->
+                        <select :class="{'invalid': !f.base}"
+                                :name="`models[${mi}].fields[${fi}].base`"
+                                class="border rounded px-2 py-1 text-sm"
+                                x-model="f.base">
+                            <option value="">— generator —</option>
+                            <template :key="opt" x-for="opt in baseOptions">
+                                <option :value="opt" x-text="opt"></option>
+                            </template>
+                        </select>
+
+                        <!-- immutable label chunk (e.g. [min,max]) -->
+                        <span class="text-gray-500 text-sm"
+                              x-text="f.label"></span>
+                    </div>
+
+                    <!-- args input -->
+                    <input :name="`models[${mi}].fields[${fi}].value`"
+                           :placeholder="argHint(f.base,f.label)"
+                           class="border rounded px-2 py-1 text-sm"
+                           x-model="f.value"
+                           x-show="needsArgs(f.base,f.label)"/>
+
+                    <!-- delete field -->
+                    <button @click="m.fields.splice(fi,1)" class="text-red-500 hover:text-red-700 text-xl leading-none"
+                            type="button">
+                        &times;
+                    </button>
+
+                    <!-- hidden label (round-trip) -->
+                    <input :name="`models[${mi}].fields[${fi}].label`" type="hidden"
+                           x-model="f.label"/>
+                </div>
+            </template>
+
+            <!-- add / delete model -->
+            <div class="flex gap-4 mt-4">
+                <button @click="addField(mi)" class="bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded"
+                        type="button">
+                    ＋ Field
+                </button>
+                <button @click="models.splice(mi,1)" class="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded"
+                        type="button">
+                    Delete Model
+                </button>
+            </div>
+        </section>
+    </template>
+
+    <!-- floating add + save -->
+    <div class="fixed bottom-4 right-4 flex gap-4">
+        <button @click="addModel()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded shadow"
+                type="button">
+            ＋ Model
+        </button>
+        <button class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 rounded shadow"
+                type="submit">
+            💾 Save
+        </button>
+    </div>
+</form>
+
+<!-- Alpine component -->
+<script>
+function builder(){
+  return {
+    catalog,
+    models,
+
+    /* relation dropdown options excluding current model */
+    relOpts(i){
+      return this.models.map(m=>m.name).filter((n,idx)=>n && idx!==i);
+    },
+
+    /* composite-key lookup: base + label */
+    meta(base,label){
+      if(!base) return null;
+      const variant = base + (label||'');                    // e.g. "int[min,max]"
+      return catalog.find(c=>c.name===variant)               // exact match
+          || catalog.find(c=>c.name===base);                 // fallback
+    },
+
+    needsArgs(base,label){
+      const g = this.meta(base,label);
+      if(!g||!g.args) return false;
+      return Array.isArray(g.args) ? g.args.length > 0
+                                   : String(g.args).trim().length > 0;
+    },
+
+    argHint(base,label){
+      const g = this.meta(base,label);
+      if(!g||!g.args) return '';
+      return Array.isArray(g.args) ? g.args.join(', ')
+                                   : String(g.args);
+    },
+
+    /* adders */
+    addModel(){
+      this.models.push({
+        name:'',count:10,belongsTo:'',hasOne:'',
+        hasMany:[],fields:[]
+      });
+    },
+    addField(mi){
+      this.models[mi].fields.push({
+        fieldKey:'',base:'',label:'',value:''
+      });
+    }
+  }
+}
+
+
+</script>
+</body>
+</html>
