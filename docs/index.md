@@ -71,6 +71,7 @@ Use the optional `join` query parameter to control relationship expansion:
 The following table lists every generator recognised by Mockify. The **Name** is used in the YAML spec, **Args** describes parameters (if any), and **Example** shows a typical usage.
 
 <!-- generator table start -->
+```
 | Name                                    | Label                               | Args                 | Example                                                                 |
 |-----------------------------------------|-------------------------------------|----------------------|-------------------------------------------------------------------------|
 | `firstName`                             | First name                          | ``                   | `John`                                                                  |
@@ -171,6 +172,7 @@ The following table lists every generator recognised by Mockify. The **Name** is
 | `celebrityActor`                        | Celebrity (actor)                   | ``                   | `Eduardo Vargas`                                                        |
 | `celebrityBusiness`                     | Celebrity (business)                | ``                   | `Craig-Ramirez`                                                          |
 | `celebritySport`                        | Celebrity (sport)                   | ``                   | `Personal`                                                              |
+```
 <!-- generator table end -->
 
 ## 5. Work in Progress
