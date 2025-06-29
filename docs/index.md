@@ -71,107 +71,106 @@ Use the optional `join` query parameter to control relationship expansion:
 The following table lists every generator recognised by Mockify. The **Name** is used in the YAML spec, **Args** describes parameters (if any), and **Example** shows a typical usage.
 
 <!-- generator table start -->
-| Name | Label | Args | Example |
-| --- | --- | --- | --- |
-| `firstName` | First name | `` | `John` |
-| `lastName` | Last name | `` | `Smith` |
-| `name` | Full name | `` | `William Fox` |
-| `namePrefix` | Name prefix | `` | `Mr.` |
-| `nameSuffix` | Name suffix | `` | `MD` |
-| `email` | E-mail | `` | `wwade@example.net` |
-| `phone` | Phone | `` | `8146447628` |
-| `phoneFormatted` | Phone (formatted) | `` | `(786)235-0094` |
-| `username` | Username | `` | `thomassylvia` |
-| `password[lower,upper,numeric,special,space,length]` | Password | `flags,length` | `^&1%a&&&a!#!` |
-| `city` | City | `` | `New Daniel` |
-| `country` | Country | `` | `Burundi` |
-| `countryCode` | Country code | `` | `SV` |
-| `state` | State/Province | `` | `New Hampshire` |
-| `stateAbbr` | State abbr | `` | `HI` |
-| `street` | Street | `` | `878 Turner Corner` |
-| `streetNumber` | Street number | `` | `1452` |
-| `streetName` | Street name | `` | `Howard Falls` |
-| `streetPrefix` | Street prefix | `` | `W` |
-| `streetSuffix` | Street suffix | `` | `Blvd` |
-| `zip` | ZIP / Post code | `` | `29613` |
-| `latitude[min,max]` | Latitude | `min,max` | `-4.4169` |
-| `longitude[min,max]` | Longitude | `min,max` | `-178.1157` |
-| `word` | Single word | `` | `through` |
-| `sentence` | Sentence | `` | `Floor finally citizen focus mention.` |
-| `paragraph` | Paragraph | `` | `Civil house through significant go already take. Free finish high probably authority mind. Parent source night resource election establish brother.` |
-| `question` | Question | `` | `Ok game rest report important maybe?` |
-| `quote` | Quote | `` | `Have way whom clearly deep deal small.` |
-| `phrase` | Catch-phrase | `` | `Profound client-server service-desk` |
-| `loremWord` | Lorem word | `` | `ok` |
-| `loremWords[min,max]` | Lorem words (range) | `min,max` | `in create relationship avoid` |
-| `loremSentences[min,max]` | Lorem sentences (range) | `min,max` | `Try measure how hundred personal bring. Series threat just ball investment.` |
-| `loremParagraphs[min,max]` | Lorem paragraphs (range) | `min,max` | `Television work include stock. Pick state theory large mind eat simple. Event day author staff focus.` |
-| `URL` | URL | `` | `http://carter.com/` |
-| `domainName` | Domain name | `` | `wall.com` |
-| `domainSuffix` | Domain suffix | `` | `com` |
-| `IPv4` | IPv4 | `` | `97.30.141.74` |
-| `IPv6` | IPv6 | `` | `6f58:1aca:c9c2:3ad0:27c8:da2e:3add:87eb` |
-| `HTTPStatus` | HTTP status | `` | `OK` |
-| `HTTPStatusCode` | HTTP status code | `` | `200` |
-| `HTTPMethod` | HTTP method | `` | `PUT` |
-| `UUID` | UUID | `` | `d24602e2-e54f-401b-9f8a-c3373ce875a6` |
-| `price[min,max]` | Price | `min,max` | `33.43` |
-| `int[min,max]` | Integer | `min,max` | `68` |
-| `float[min,max]` | Float | `min,max` | `5.42` |
-| `digit` | Single digit | `` | `6` |
-| `digits n` | Digits (n length) | `n` | `071234` |
-| `hex8` | Hex-8 | `` | `d211bd31` |
-| `hex16` | Hex-16 | `` | `1d02c2c8c5c1114d` |
-| `hex32` | Hex-32 | `` | `a41bbc598726c05097a6cf606db49622` |
-| `hex128` | Hex-128 | `` | `b3833e3bceee31e58d97d23a99c3a7653e2a0d21ae1afd566057903cafd5a390c27567afe96bda656a22a7e6551a3d083d8fbb8fc2eced064c846e2cf81e8122` |
-| `hex256` | Hex-256 | `` | `494d81bc79ff3342b269597ce7680ff1e007206669f56511c2eaf32bca752423fee86e053fc6e08cc4f0a679692be795ea9edda5dd04bcd7bb08b6e18c53091aa44eb96274f97e166b6f1fef5d95e32d933b009f137e55ae06607cd9f506263f1409a123b7c002962acab2e41a50b7157d42cbb1cb0e8dcdfb27db2647248df6` |
-| `bool` | Boolean (50 %) | `` | `True` |
-| `bool[pct]` | Boolean with probability | `0-100` | `False` |
-| `lexify` | Lexify pattern | `pattern` | `ITEM-taum` |
-| `numerify` | Numerify pattern | `pattern` | `1978-2025` |
-| `bothify` | Bothify pattern | `pattern` | `GQ-15` |
-| `regexp` | RegExp | `regex` | `XI226` |
-| `oneOfString` | Pick one (string list) | `list` | `green` |
-| `oneOfInt` | Pick one (int list) | `list` | `2` |
-| `oneOfFloat` | Pick one (float list) | `list` | `1.1` |
-| `oneOfDateTime` | Pick one (ISO date list) | `list` | `2025-01-01T00:00:00Z` |
-| `dateTime[start,end]` | DateTime range | `start,end` | `2023-06-01T12:34:56Z` |
-| `second` | Second (0-59) | `` | `8` |
-| `minute` | Minute (0-59) | `` | `3` |
-| `hour` | Hour (0-23) | `` | `12` |
-| `day` | Day (1-31) | `` | `24` |
-| `month` | Month (1-12) | `` | `1` |
-| `year` | Year | `` | `2006` |
-| `weekDay` | Week day | `` | `Friday` |
-| `monthName` | Month name | `` | `December` |
-| `imageURL[w,h]` | Image URL (random) | `width,height` | `https://picsum.photos/300/300?random=820` |
-| `color` | Colour name | `` | `Cyan` |
-| `hexColor` | Colour HEX | `` | `#ce5d64` |
-| `RGBColor` | Colour RGB() | `` | `rgb(126,31,158)` |
-| `safeColor` | Safe colour | `` | `maroon` |
-| `emoji` | Emoji | `` | `🚀` |
-| `emojiDescription` | Emoji description | `` | `rocket` |
-| `language` | Language | `` | `Sichuan Yi` |
-| `languageAbbr` | Language abbr | `` | `en` |
-| `languageBCP` | Language BCP-47 | `` | `en-US` |
-| `company` | Company | `` | `Smith PLC` |
-| `companySuffix` | Company suffix | `` | `LLC` |
-| `jobTitle` | Job title | `` | `General practice doctor` |
-| `jobLevel` | Job level | `` | `Lead` |
-| `creditCardCVV` | CC CVV | `` | `343` |
-| `creditCardExp` | CC expiry | `` | `04/27` |
-| `creditCardNumber` | CC number | `` | `3514310145618035` |
-| `creditCardType` | CC type | `` | `JCB 16 digit` |
-| `currencyCode` | Currency code | `` | `NOK` |
-| `currencyName` | Currency name | `` | `Zambian kwacha` |
-| `ACHRouting` | ACH routing | `` | `849725935` |
-| `ACHAccount` | ACH account | `` | `GB98WSNR33836996941739` |
-| `bitcoinAddress` | Bitcoin address | `` | `1552fb34d83b770e65aa49ba7bd16844df` |
-| `bitcoinPrivateKey` | Bitcoin private key | `` | `c4130282131d262d0298070e249aee95cc740130cb315fc5db8353b5ae57ab37` |
-| `celebrityActor` | Celebrity (actor) | `` | `Eduardo Vargas` |
-| `celebrityBusiness` | Celebrity (business) | `` | `Craig-Ramirez` |
-
-| `celebritySport` | Celebrity (sport) | `` | `Personal` |
+| Name                                    | Label                               | Args                 | Example                                                                 |
+|-----------------------------------------|-------------------------------------|----------------------|-------------------------------------------------------------------------|
+| `firstName`                             | First name                          | ``                   | `John`                                                                  |
+| `lastName`                              | Last name                           | ``                   | `Smith`                                                                 |
+| `name`                                  | Full name                           | ``                   | `William Fox`                                                           |
+| `namePrefix`                            | Name prefix                         | ``                   | `Mr.`                                                                   |
+| `nameSuffix`                            | Name suffix                         | ``                   | `MD`                                                                    |
+| `email`                                 | E-mail                              | ``                   | `wwade@example.net`                                                     |
+| `phone`                                 | Phone                               | ``                   | `8146447628`                                                            |
+| `phoneFormatted`                        | Phone (formatted)                   | ``                   | `(786)235-0094`                                                         |
+| `username`                              | Username                            | ``                   | `thomassylvia`                                                          |
+| `password[lower,upper,numeric,special,space,length]` | Password                           | `flags,length`       | `^&1%a&&&a!#!`                                                          |
+| `city`                                  | City                                | ``                   | `New Daniel`                                                            |
+| `country`                               | Country                             | ``                   | `Burundi`                                                               |
+| `countryCode`                           | Country code                        | ``                   | `SV`                                                                    |
+| `state`                                 | State/Province                      | ``                   | `New Hampshire`                                                         |
+| `stateAbbr`                             | State abbr                          | ``                   | `HI`                                                                    |
+| `street`                                | Street                              | ``                   | `878 Turner Corner`                                                      |
+| `streetNumber`                          | Street number                       | ``                   | `1452`                                                                  |
+| `streetName`                            | Street name                         | ``                   | `Howard Falls`                                                          |
+| `streetPrefix`                          | Street prefix                       | ``                   | `W`                                                                     |
+| `streetSuffix`                          | Street suffix                       | ``                   | `Blvd`                                                                  |
+| `zip`                                   | ZIP / Post code                     | ``                   | `29613`                                                                 |
+| `latitude[min,max]`                     | Latitude                            | `min,max`            | `-4.4169`                                                               |
+| `longitude[min,max]`                    | Longitude                           | `min,max`            | `-178.1157`                                                              |
+| `word`                                  | Single word                         | ``                   | `through`                                                               |
+| `sentence`                              | Sentence                            | ``                   | `Floor finally citizen focus mention.`                                  |
+| `paragraph`                             | Paragraph                           | ``                   | `Civil house through significant go already take. Free finish high probably authority mind. Parent source night resource election establish brother.` |
+| `question`                              | Question                            | ``                   | `Ok game rest report important maybe?`                                  |
+| `quote`                                 | Quote                               | ``                   | `Have way whom clearly deep deal small.`                                |
+| `phrase`                                | Catch-phrase                        | ``                   | `Profound client-server service-desk`                                   |
+| `loremWord`                             | Lorem word                          | ``                   | `ok`                                                                    |
+| `loremWords[min,max]`                   | Lorem words (range)                 | `min,max`            | `in create relationship avoid`                                          |
+| `loremSentences[min,max]`               | Lorem sentences (range)             | `min,max`            | `Try measure how hundred personal bring. Series threat just ball investment.` |
+| `loremParagraphs[min,max]`              | Lorem paragraphs (range)            | `min,max`            | `Television work include stock. Pick state theory large mind eat simple. Event day author staff focus.` |
+| `URL`                                   | URL                                 | ``                   | `http://carter.com/`                                                    |
+| `domainName`                            | Domain name                         | ``                   | `wall.com`                                                              |
+| `domainSuffix`                          | Domain suffix                       | ``                   | `com`                                                                    |
+| `IPv4`                                  | IPv4                                | ``                   | `97.30.141.74`                                                          |
+| `IPv6`                                  | IPv6                                | ``                   | `6f58:1aca:c9c2:3ad0:27c8:da2e:3add:87eb`                               |
+| `HTTPStatus`                            | HTTP status                         | ``                   | `OK`                                                                    |
+| `HTTPStatusCode`                        | HTTP status code                    | ``                   | `200`                                                                   |
+| `HTTPMethod`                            | HTTP method                         | ``                   | `PUT`                                                                   |
+| `UUID`                                  | UUID                                | ``                   | `d24602e2-e54f-401b-9f8a-c3373ce875a6`                                 |
+| `price[min,max]`                        | Price                               | `min,max`            | `33.43`                                                                  |
+| `int[min,max]`                          | Integer                             | `min,max`            | `68`                                                                    |
+| `float[min,max]`                        | Float                               | `min,max`            | `5.42`                                                                  |
+| `digit`                                 | Single digit                        | ``                   | `6`                                                                     |
+| `digits n`                              | Digits (n length)                   | `n`                  | `071234`                                                                |
+| `hex8`                                  | Hex-8                               | ``                   | `d211bd31`                                                              |
+| `hex16`                                 | Hex-16                              | ``                   | `1d02c2c8c5c1114d`                                                      |
+| `hex32`                                 | Hex-32                              | ``                   | `a41bbc598726c05097a6cf606db49622`                                    |
+| `hex128`                                | Hex-128                             | ``                   | `b3833e3bceee31e58d97d23a99c3a7653e2a0d21ae1afd566057903cafd5a390c27567afe96bda656a22a7e6551a3d083d8fbb8fc2eced064c846e2cf81e8122` |
+| `hex256`                                | Hex-256                             | ``                   | `494d81bc79ff3342b269597ce7680ff1e007206669f56511c2eaf32bca752423fee86e053fc6e08cc4f0a679692be795ea9edda5dd04bcd7bb08b6e18c53091aa44eb96274f97e166b6f1fef5d95e32d933b009f137e55ae06607cd9f506263f1409a123b7c002962acab2e41a50b7157d42cbb1cb0e8dcdfb27db2647248df6` |
+| `bool`                                  | Boolean (50 %)                       | ``                   | `True`                                                                  |
+| `bool[pct]`                              | Boolean with probability            | `0-100`              | `False`                                                                 |
+| `lexify`                                | Lexify pattern                      | `pattern`            | `ITEM-taum`                                                             |
+| `numerify`                              | Numerify pattern                    | `pattern`            | `1978-2025`                                                             |
+| `bothify`                               | Bothify pattern                     | `pattern`            | `GQ-15`                                                                 |
+| `regexp`                                | RegExp                               | `regex`              | `XI226`                                                                 |
+| `oneOfString`                           | Pick one (string list)              | `list`               | `green`                                                                 |
+| `oneOfInt`                              | Pick one (int list)                 | `list`               | `2`                                                                     |
+| `oneOfFloat`                            | Pick one (float list)               | `list`               | `1.1`                                                                   |
+| `oneOfDateTime`                         | Pick one (ISO date list)            | `list`               | `2025-01-01T00:00:00Z`                                                  |
+| `dateTime[start,end]`                   | DateTime range                       | `start,end`          | `2023-06-01T12:34:56Z`                                                  |
+| `second`                                | Second (0-59)                        | ``                   | `8`                                                                     |
+| `minute`                                | Minute (0-59)                        | ``                   | `3`                                                                     |
+| `hour`                                  | Hour (0-23)                          | ``                   | `12`                                                                    |
+| `day`                                   | Day (1-31)                           | ``                   | `24`                                                                    |
+| `month`                                 | Month (1-12)                         | ``                   | `1`                                                                     |
+| `year`                                  | Year                                | ``                   | `2006`                                                                  |
+| `weekDay`                               | Week day                            | ``                   | `Friday`                                                                |
+| `monthName`                             | Month name                          | ``                   | `December`                                                              |
+| `imageURL[w,h]`                         | Image URL (random)                  | `width,height`       | `https://picsum.photos/300/300?random=820`                              |
+| `color`                                 | Colour name                         | ``                   | `Cyan`                                                                  |
+| `hexColor`                              | Colour HEX                          | ``                   | `#ce5d64`                                                               |
+| `RGBColor`                              | Colour RGB()                        | ``                   | `rgb(126,31,158)`                                                        |
+| `safeColor`                             | Safe colour                         | ``                   | `maroon`                                                                |
+| `emoji`                                 | Emoji                               | ``                   | `🚀`                                                                   |
+| `emojiDescription`                      | Emoji description                   | ``                   | `rocket`                                                                |
+| `language`                              | Language                            | ``                   | `Sichuan Yi`                                                            |
+| `languageAbbr`                          | Language abbr                       | ``                   | `en`                                                                    |
+| `languageBCP`                           | Language BCP-47                      | ``                   | `en-US`                                                                  |
+| `company`                               | Company                             | ``                   | `Smith PLC`                                                             |
+| `companySuffix`                         | Company suffix                      | ``                   | `LLC`                                                                    |
+| `jobTitle`                              | Job title                           | ``                   | `General practice doctor`                                               |
+| `jobLevel`                              | Job level                           | ``                   | `Lead`                                                                  |
+| `creditCardCVV`                         | CC CVV                              | ``                   | `343`                                                                   |
+| `creditCardExp`                         | CC expiry                           | ``                   | `04/27`                                                                 |
+| `creditCardNumber`                      | CC number                           | ``                   | `3514310145618035`                                                      |
+| `creditCardType`                        | CC type                             | ``                   | `JCB 16 digit`                                                          |
+| `currencyCode`                          | Currency code                       | ``                   | `NOK`                                                                   |
+| `currencyName`                          | Currency name                       | ``                   | `Zambian kwacha`                                                        |
+| `ACHRouting`                            | ACH routing                         | ``                   | `849725935`                                                             |
+| `ACHAccount`                            | ACH account                         | ``                   | `GB98WSNR33836996941739`                                                |
+| `bitcoinAddress`                        | Bitcoin address                     | ``                   | `1552fb34d83b770e65aa49ba7bd16844df`                                   |
+| `bitcoinPrivateKey`                     | Bitcoin private key                 | ``                   | `c4130282131d262d0298070e249aee95cc740130cb315fc5db8353b5ae57ab37`     |
+| `celebrityActor`                        | Celebrity (actor)                   | ``                   | `Eduardo Vargas`                                                        |
+| `celebrityBusiness`                     | Celebrity (business)                | ``                   | `Craig-Ramirez`                                                          |
+| `celebritySport`                        | Celebrity (sport)                   | ``                   | `Personal`                                                              |
 <!-- generator table end -->
 
 ## 5. Work in Progress
