@@ -1,13 +1,13 @@
 # Mockify - Mocked Backend API Generator tool
 
-> *Instant fake REST APIs powered by SpringBoot, YAML and Faker.*
+> *Instant fake REST APIs powered by SpringBoot, YAML and Datafaker.*
 >
 ---
 
 ## Overview 💡
 
 Mockify is a personal, open‑source side‑project that lets you design a data model in **YAML** and immediately receive a
-fully‑functional JSON REST API backed by in‑memory Faker data. Think of it as self‑hosted *jsonplaceholder*+*mockify*
+fully‑functional JSON REST API backed by in‑memory Datafaker data. Think of it as self‑hosted *jsonplaceholder*+*mockify*
 but written in Java17 & Spring Boot3.
 
 ### Key Features 🔦
