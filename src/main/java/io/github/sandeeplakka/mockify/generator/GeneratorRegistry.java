@@ -1,7 +1,7 @@
 package io.github.sandeeplakka.mockify.generator;
 
-import com.github.javafaker.CreditCardType;
-import com.github.javafaker.Faker;
+import net.datafaker.Faker;
+import net.datafaker.providers.base.Finance.CreditCardType;
 import lombok.extern.slf4j.Slf4j;
 
 import java.security.SecureRandom;
@@ -196,7 +196,7 @@ public final class GeneratorRegistry {
         NO_ARG.put("achrouting", () -> String.format("%09d", rnd.nextInt(1_000_000_000)));
         NO_ARG.put("achaccount", () -> faker.finance().iban());
         NO_ARG.put("bitcoinaddress", () -> "1" + randomHex(33));
-        NO_ARG.put("bitcoinprivatekey", () -> faker.crypto().sha256());
+        NO_ARG.put("bitcoinprivatekey", () -> faker.hashing().sha256());
 
         // Celebrity (not me :P) related
         NO_ARG.put("celebrityactor", () -> faker.artist().name());

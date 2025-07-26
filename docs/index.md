@@ -4,7 +4,7 @@ This document summarizes all functionality provided by Mockify, lists every buil
 
 ## 1. Application Overview
 
-Mockify turns a YAML schema into REST endpoints backed by in‑memory data generated via [Faker](https://github.com/DiUS/java-faker). After startup the service exposes data for each model defined in `jsonSchema.yml` under `/api/{model}`.
+Mockify turns a YAML schema into REST endpoints backed by in‑memory data generated via [Datafaker](https://github.com/datafaker-net/datafaker). After startup the service exposes data for each model defined in `jsonSchema.yml` under `/api/{model}`.
 
 ### Key Modules
 
