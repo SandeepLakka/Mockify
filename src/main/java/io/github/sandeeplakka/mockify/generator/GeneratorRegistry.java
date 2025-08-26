@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.security.SecureRandom;
 import java.util.*;
-import java.util.regex.Pattern;
 
 @Slf4j
 public final class GeneratorRegistry {
@@ -16,8 +15,6 @@ public final class GeneratorRegistry {
     //Currently, the storage is in-memory
     private static final Map<String, DataGenerator> NO_ARG = new HashMap<>();
     private static final Map<String, java.util.function.Function<List<String>, Object>> ARG = new HashMap<>();
-    private static final Pattern HEX = Pattern.compile("[0-9a-f]");
-
     //helpers
     private static final char[] DIGITS = "0123456789".toCharArray();
     private static final char[] LETTER = "abcdefghijklmnopqrstuvwxyz".toCharArray();
@@ -234,10 +231,6 @@ public final class GeneratorRegistry {
             return "https://picsum.photos/%d/%d?random=%d".formatted(w, h, rnd.nextInt());
         });
     }
-
-    {
-    }
-
     private static String randomHex(int len) {
         var sb = new StringBuilder(len);
         for (int i = 0; i < len; i++) sb.append(Integer.toHexString(rnd.nextInt(16)));
