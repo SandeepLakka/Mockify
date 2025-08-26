@@ -47,6 +47,9 @@ public class SchemaService {
     /* ------------ I/O -------------------------------------------- */
     private Map<String, ModelCfg> load() {
         Map<String, Object> root = read();
+        if (root == null) {
+            root = Map.of("models", Map.of());
+        }
         Map<String, Object> raw = (Map<String, Object>) root.getOrDefault("models", Map.of());
 
         return raw.entrySet().stream().collect(Collectors.toMap(
