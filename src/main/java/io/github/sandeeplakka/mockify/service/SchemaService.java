@@ -2,6 +2,7 @@ package io.github.sandeeplakka.mockify.service;
 
 import io.github.sandeeplakka.mockify.config.SchemaStorageProperties;
 import io.github.sandeeplakka.mockify.schema.ModelCfg;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -26,10 +27,13 @@ public class SchemaService {
     }
 
     private final SchemaStorageProperties props;
+    private final ApplicationEventPublisher publisher;
     private Map<String, ModelCfg> cfgs;
 
-    public SchemaService(SchemaStorageProperties props) {
+    public SchemaService(SchemaStorageProperties props,
+                         ApplicationEventPublisher publisher) {
         this.props = props;
+        this.publisher = publisher;
         cfgs = load();
     }
 
@@ -83,6 +87,7 @@ public class SchemaService {
             Files.createDirectories(p.getParent());
             Files.writeString(p, yaml.dump(newRoot));
             cfgs = load();                       // hot-reload
+            publisher.publishEvent(new SchemaReloadedEvent(cfgs));
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
