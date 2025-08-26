@@ -3,6 +3,7 @@ package io.github.sandeeplakka.mockify.service;
 import io.github.sandeeplakka.mockify.generator.GeneratorRegistry;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -22,6 +23,13 @@ public class DatasetBuilder {
 
     @PostConstruct
     public void init() {
+        buildRows();
+        wireFKs();
+    }
+
+    @EventListener
+    public void onSchemaReloaded(SchemaReloadedEvent event) {
+        data.clear();
         buildRows();
         wireFKs();
     }
